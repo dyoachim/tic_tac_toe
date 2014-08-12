@@ -9,7 +9,6 @@ class TicTacToe
               "_", "_", "_",
               "_", "_", "_",
               ]
-    puts "Welcome to Tic-Tac-Toe. Input 1-9 to make a move."
 
     while @board.include?("_")
       player_turn("X")
@@ -34,6 +33,7 @@ class TicTacToe
   def display_board
     system 'clear'
     board = @board
+    puts "Welcome to Tic-Tac-Toe. Input 1-9 to make a move."
     puts ".........."
     puts board[0] + board[1] + board[2]
     puts board[3] + board[4] + board[5]
@@ -59,10 +59,11 @@ class TicTacToe
     puts "O:"
     sleep(1)
 
+    return if try_winning
     return if try_blocking
 
     if round == 1
-      if [@board[0],@board[2],@board,[6],@board[8]].include?('X') && @board[4] == '_'
+      if [@board[0], @board[1],@board[2],@board[3],@board[5],@board[6],@board[7],@board[8]].include?('X') && @board[4] == '_'
         move = 4
 
       elsif @board[4] == 'X'
@@ -73,6 +74,8 @@ class TicTacToe
            
       elsif [@board[1],@board[3],@board,[5],@board[7]].include?('X')
       end
+    else 
+      make_move
     end
 
     if move 
@@ -95,13 +98,63 @@ class TicTacToe
       board[2] + board[5] + board[8],
       #diagonal
       board[0] + board[4] + board[8],
-      board[2] + board[4] + board[6] ].include?(player*3)
+      board[2] + board[4] + board[6] ].include?(player*3) || @board.include?("_") == false
+  end
+
+  def make_move
+    win_chance = ['_OO','O_O','OO_','__O','O__','_O_', '___']
+    if win_chance.include?([@board[0], @board[3], @board[6]].join)
+      choice = [0,6]
+    elsif win_chance.include?([@board[1], @board[4], @board[7]].join)
+      choice = [1,7]
+    elsif win_chance.include?([@board[2], @board[5], @board[8]].join)
+      choice = [2,8]
+    elsif win_chance.include?([@board[0], @board[1], @board[2]].join)
+      choice = [0,6]
+    elsif win_chance.include?([@board[3], @board[4], @board[5]].join)
+      choice = [1,7]
+    elsif win_chance.include?([@board[6], @board[7], @board[8]].join)
+      choice = [2,8]
+    else 
+      choice = [] << @board.index('_')
+    end
+
+    if @board[choice[0]] == "_"
+      @board[choice[0]] = "O" 
+    else
+      @board[choice[1]] = "O" 
+    end
   end
 
   def try_blocking
     board = @board
     move = false
     block_chance = ['_XX','X_X','XX_']
+
+
+    [0,3,6].each do |i|
+      line = [board[i], board[i+1], board[i+2]].join
+      block_chance.include?(line) ? move = i + line.index('_') : false
+    end
+
+    [0,1,2].each do |i|
+      line = [board[i], board[i+3], board[i+6]].join
+      block_chance.include?(line) ? move = i + line.index('_') * 3 : false
+    end
+
+    diagonal_backward = [board[0], board[4], board[8]].join
+    diagional_forward = [board[2], board[4], board[6]].join
+
+    block_chance.include?(diagonal_backward) ? move = diagonal_backward.index('_') * 4     : false
+    block_chance.include?(diagional_forward) ? move = diagional_forward.index('_') * 2 + 2 : false
+
+    move ? @board[move] = "O" : false
+  end
+
+  def try_winning
+    board = @board
+    move = false
+    block_chance = ['_OO','O_O','OO_']
 
 
     [0,3,6].each do |i|
