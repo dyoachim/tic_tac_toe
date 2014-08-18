@@ -7,7 +7,7 @@ class TicTacToe
   def game_session
     board = Board.new
     player_one = Player.new(board, 'X')
-    player_two_AI = Tic_tac_AI.new(board, "O")
+    player_two_AI = Tic_tac_AI.new(board, "O", "X")
 
     while board.board.include?("_")
       player_one.take_turn

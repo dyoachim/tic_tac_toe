@@ -1,8 +1,9 @@
 class Tic_tac_AI
 
-	def initialize(board, letter)
+	def initialize(board, letter, opponent_letter)
     @board = board
     @letter = letter
+    @opponent_letter = opponent_letter
   end
 
   def take_turn
@@ -10,13 +11,13 @@ class Tic_tac_AI
     puts @letter + ":"
     sleep(1)
 
-    return if try_win
-    return if try_block
+    return if can_win?
+    return if can_block?
 
-    if @board.board.include?("X") && !(@board.board.include?(@letter))
+    if @board.board.include?(@opponent_letter) && !(@board.board.include?(@letter))
       if @board.board[4] == '_'
         move = 4
-      elsif @board.board[4] == 'X'
+      elsif @board.board[4] == @opponent_letter
         move = 0 unless @board.board[0] != '_'
         move = 2 unless @board.board[2] != '_'
         move = 6 unless @board.board[6] != '_'
@@ -30,7 +31,7 @@ class Tic_tac_AI
 
 
   def make_move
-    win_chance = ['_OO','O_O','OO_','__O','O__','_O_', '___']
+    win_chance = [@letter, @letter,'_','_','_'].permutation(3).map(&:join).uniq
     board = @board.board
 
     if win_chance.include?([board[3], board[4], board[5]].join)
@@ -52,14 +53,14 @@ class Tic_tac_AI
     end
 
     if board[choice[0]] == "_"
-      @board.board[choice[0]] = "O" 
+      @board.board[choice[0]] = @letter
     else
-      @board.board[choice[1]] = "O" 
+      @board.board[choice[1]] = @letter
     end
   end
 
-  def try_win
-    win_chance = ['_OO','O_O','OO_']
+  def can_win?
+    win_chance = [@letter, @letter,'_'].permutation(3).map(&:join).uniq
     board = @board.board
 
     @board.combos.each do |combo|
@@ -67,7 +68,7 @@ class Tic_tac_AI
       if win_chance.include?(line)
         (0..2).each do |place|
           if board[combo[place]] == "_"
-            @board.board[combo[place]] = "O"
+            @board.board[combo[place]] = @letter
             return true
           end
         end
@@ -76,8 +77,8 @@ class Tic_tac_AI
     false
   end
 
-  def try_block
-    block_chance = ['_XX','X_X','XX_']
+  def can_block?
+    block_chance = [@opponent_letter, @opponent_letter,'_'].permutation(3).map(&:join).uniq
     board = @board.board
 
     @board.combos.each do |combo|
@@ -85,7 +86,7 @@ class Tic_tac_AI
       if block_chance.include?(line)
         (0..2).each do |place|
           if board[combo[place]] == "_"
-            @board.board[combo[place]] = "O"
+            @board.board[combo[place]] = @letter
             return true
           end
         end
