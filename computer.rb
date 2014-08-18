@@ -45,6 +45,8 @@ class Tic_tac_AI
       choice = [0,2]
     elsif win_chance.include?([board[6], board[7], board[8]].join)
       choice = [6,8]
+    elsif win_chance.include?([board[2], board[4], board[6]].join)
+      choice = [2,6]
     else 
       choice = [] << board.index('_')
     end

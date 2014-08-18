@@ -5,7 +5,6 @@ describe Tic_tac_AI do
 
 	let!(:board) { Board.new }
 
-	#Player.stub(:gets).and_return(2)
 	describe "first move" do
 		it 'chooses center if possible' do
 			board.board = ["X","_","_","_","_","_","_","_","_"]

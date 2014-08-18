@@ -1,8 +1,8 @@
-load "player.rb"
-load "computer.rb"
-load "board.rb"
 
 class TicTacToe
+  require "./player"
+  require "./computer"
+  require "./board"
 
   def game_session
     round = 1
