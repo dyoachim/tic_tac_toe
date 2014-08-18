@@ -8,7 +8,7 @@ describe Player do
 
 	
 	it 'marks the board on its turn' do
-		Kernel.stub(:gets).and_return(2)
+		expect(player_x).to receive(:get_number).once.and_return(3)
 
 		expect(board.board).not_to include("X")
 		player_x.take_turn

@@ -6,16 +6,19 @@ class Player
     @letter = letter
   end
 
+  def get_number
+    gets.chomp.to_i - 1
+  end
+
   def take_turn
   	@board.display_board
     puts @letter + ":"
-    move = gets.chomp.to_i - 1
+    move = get_number
     
     if !((0..8).include?(move))
       puts "Invalid move!"
       sleep(1)
       self.take_turn
-      return
     elsif @board.board[move] != '_'
       puts "Already taken!"
       sleep(1)
