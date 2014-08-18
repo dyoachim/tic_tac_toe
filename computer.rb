@@ -1,4 +1,5 @@
 class Tic_tac_AI
+  attr_reader :letter
 
 	def initialize(board, letter, opponent_letter)
     @board = board
@@ -14,27 +15,23 @@ class Tic_tac_AI
     return if can_win?
     return if can_block?
 
-    if @board.board.include?(@opponent_letter) && !(@board.board.include?(@letter))
-      if @board.board[4] == '_'
-        move = 4
-      elsif @board.board[4] == @opponent_letter
-        move = 0 unless @board.board[0] != '_'
-        move = 2 unless @board.board[2] != '_'
-        move = 6 unless @board.board[6] != '_'
-        move = 8 unless @board.board[8] != '_'
-      end
-      @board.board[move] = @letter
-    else 
-      make_move
-    end
+    make_move
   end
-
 
   def make_move
     win_chance = [@letter, @letter,'_','_','_'].permutation(3).map(&:join).uniq
     board = @board.board
 
-    if win_chance.include?([board[3], board[4], board[5]].join)
+    if board.include?(@opponent_letter) && !(board.include?(@letter))
+      if board[4] == '_'
+        choice = [4]
+      else
+        choice = [0] unless board[0] != '_'
+        choice = [2] unless board[2] != '_'
+        choice = [6] unless board[6] != '_'
+        choice = [8] unless board[8] != '_'
+      end
+    elsif win_chance.include?([board[3], board[4], board[5]].join)
       choice = [3,5]
     elsif win_chance.include?([board[1], board[4], board[7]].join)
       choice = [1,7]
@@ -60,35 +57,24 @@ class Tic_tac_AI
   end
 
   def can_win?
-    win_chance = [@letter, @letter,'_'].permutation(3).map(&:join).uniq
-    board = @board.board
-
-    @board.combos.each do |combo|
-      line = [board[combo[0]], board[combo[1]], board[combo[2]]].join
-      if win_chance.include?(line)
-        (0..2).each do |place|
-          if board[combo[place]] == "_"
-            @board.board[combo[place]] = @letter
-            return true
-          end
-        end
-      end
-    end
-    false
+    space_between = find_space_between(@letter)
+    space_between ? @board.board[space_between] = @letter : false
   end
 
   def can_block?
-    block_chance = [@opponent_letter, @opponent_letter,'_'].permutation(3).map(&:join).uniq
+    space_between = find_space_between(@opponent_letter)
+    space_between ? @board.board[space_between] = @letter : false 
+  end
+
+  def find_space_between(letter)
+    block_chance = [letter, letter,'_'].permutation(3).map(&:join).uniq
     board = @board.board
 
     @board.combos.each do |combo|
       line = [board[combo[0]], board[combo[1]], board[combo[2]]].join
       if block_chance.include?(line)
         (0..2).each do |place|
-          if board[combo[place]] == "_"
-            @board.board[combo[place]] = @letter
-            return true
-          end
+          return combo[place] if board[combo[place]] == "_"
         end
       end
     end

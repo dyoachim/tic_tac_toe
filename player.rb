@@ -1,5 +1,6 @@
 class Player
 
+  attr_reader :letter
   def initialize(board, letter)
     @board = board
     @letter = letter

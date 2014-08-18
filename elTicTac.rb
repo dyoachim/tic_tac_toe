@@ -11,10 +11,10 @@ class TicTacToe
 
     while board.board.include?("_")
       player_one.take_turn
-      break if board.check_game("X")
+      break if board.check_game(player_one.letter)
 
       player_two_AI.take_turn
-      break if board.check_game("O")
+      break if board.check_game(player_two_AI.letter)
     end
     
     board.display_board
