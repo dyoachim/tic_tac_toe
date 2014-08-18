@@ -5,7 +5,7 @@ class Tic_tac_AI
     @letter = letter
   end
 
-  def take_turn(round)
+  def take_turn
     @board.display_board
     puts @letter + ":"
     sleep(1)
@@ -13,7 +13,7 @@ class Tic_tac_AI
     return if try_win
     return if try_block
 
-    if round == 1
+    if @board.board.include?("X") && !(@board.board.include?(@letter))
       if @board.board[4] == '_'
         move = 4
       elsif @board.board[4] == 'X'
@@ -22,7 +22,7 @@ class Tic_tac_AI
         move = 6 unless @board.board[6] != '_'
         move = 8 unless @board.board[8] != '_'
       end
-      @board.board[move] = "O" 
+      @board.board[move] = @letter
     else 
       make_move
     end
