@@ -19,10 +19,12 @@ class Player
       puts "Invalid move!"
       sleep(1)
       self.take_turn
-    elsif @board.board[move] != '_'
+      return
+    elsif !(@board.open?(move))
       puts "Already taken!"
       sleep(1)
       self.take_turn
+      return
     end
     
     @board.board[move] = @letter

@@ -21,6 +21,14 @@ class Board
     puts ".........."
   end
 
+  def not_full?
+    return @board.include?("_") 
+  end
+
+  def open?(space_number)
+    return @board[space_number] == "_"
+  end
+
   def check_game(player)
     combos = @combos.map {|combo| @board[combo[0]] + @board[combo[1]] + @board[combo[2]]}
     return combos.include?(player*3) || @board.include?("_") == false

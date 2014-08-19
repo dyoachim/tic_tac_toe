@@ -4,26 +4,27 @@ class TicTacToe
   require "./computer"
   require "./board"
 
-  def game_session
-    board = Board.new
-    player_one = Player.new(board, 'X')
-    player_two_AI = Tic_tac_AI.new(board, "O", "X")
+  def game_session(board, player_one, player_two)
+    @board = board
+    @player_one = player_one
+    @player_two = player_two
 
-    while board.board.include?("_")
-      player_one.take_turn
-      break if board.check_game(player_one.letter)
+    while board.not_full?
+      @player_one.take_turn
+      break if board.check_game(@player_one.letter)
 
-      player_two_AI.take_turn
-      break if board.check_game(player_two_AI.letter)
+      @player_two.take_turn
+      break if board.check_game(@player_two.letter)
     end
     
     board.display_board
-    puts "Game over! Play again? y/n"
-    if gets.chomp == 'y'
-      self.game_session
-    end
+    puts "Game over!"
   end
 end
 
 game = TicTacToe.new
-game.game_session
+board = Board.new
+player_one = Player.new(board, 'X')
+player_two_AI = Tic_tac_AI.new(board, "O", "X")
+
+game.game_session(board, player_one, player_two_AI)
