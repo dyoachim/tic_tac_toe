@@ -1,7 +1,7 @@
 class Tic_tac_AI
   attr_reader :letter
 
-	def initialize(board, letter, opponent_letter)
+  def initialize(board, letter, opponent_letter)
     @board = board
     @letter = letter
     @opponent_letter = opponent_letter
