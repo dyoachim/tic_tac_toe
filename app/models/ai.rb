@@ -8,7 +8,6 @@ class Tic_tac_AI
   end
 
   def take_turn
-    #sleep(1)
     win = can_win?
     block = can_block?
 
