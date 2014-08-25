@@ -14,18 +14,18 @@ Create the board
 `board = Board.new`
 
 Play with two humans  
-`player_one = Player.new(board, 'X')`
-`player_two = Player.new(board, 'O')`
-`board.game_session(player_one, player_two)`
+`player_one = Player.new(board, 'X')`  
+`player_two = Player.new(board, 'O')`  
+`board.game_session(player_one, player_two)`  
 
 Play with two computers  
-`player_one_AI = Tic_tac_AI.new(board, "X", "O")`
-`player_two_AI = Tic_tac_AI.new(board, "O", "X")`
-`board.game_session(player_one_AI, player_two_AI)`
+`player_one_AI = Tic_tac_AI.new(board, "X", "O")`  
+`player_two_AI = Tic_tac_AI.new(board, "O", "X")`  
+`board.game_session(player_one_AI, player_two_AI)`    
 
 Play Human-AI  
-`player_one = Player.new(board, 'X')`
-`player_two_AI = Tic_tac_AI.new(board, "O", "X")`
-`board.game_session(player_one, player_two_AI)`
+`player_one = Player.new(board, 'X')`  
+`player_two_AI = Tic_tac_AI.new(board, "O", "X")`  
+`board.game_session(player_one, player_two_AI)`  
 
 Use `ruby runner.rb` to view example in root directory.
