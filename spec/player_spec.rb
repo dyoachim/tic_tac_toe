@@ -1,5 +1,5 @@
-require "./player.rb"
-require "./board.rb"
+require "./app/models/player.rb"
+require "./app/models/board.rb"
 
 describe Player do
 
