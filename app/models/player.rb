@@ -6,26 +6,7 @@ class Player
     @letter = letter
   end
 
-  def get_number
-    gets.chomp.to_i - 1
-  end
-
   def take_turn
-    puts @letter + ":"
-    move = get_number
-    
-    if !((0..8).include?(move))
-      puts "Invalid move!"
-      sleep(1)
-      self.take_turn
-      return
-    elsif !(@board.open?(move))
-      puts "Already taken!"
-      sleep(1)
-      self.take_turn
-      return
-    end
-    
-    @board.board[move] = @letter
+    gets.chomp.to_i - 1
   end
 end

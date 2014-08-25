@@ -8,11 +8,12 @@ class Tic_tac_AI
   end
 
   def take_turn
-    puts @letter + ":"
     sleep(1)
+    win = can_win?
+    block = can_block?
 
-    return if can_win?
-    return if can_block?
+    return win if  win
+    return block if block
 
     make_move
   end
@@ -26,7 +27,7 @@ class Tic_tac_AI
         choice = [4]
       else
         pick = [0,2,6,8].sample until pick && @board.open?(pick)
-        choice = [] << pick
+        choice = [pick]
       end
     elsif win_chance.include?([board[3], board[4], board[5]].join)
       choice = [3,5]
@@ -43,24 +44,22 @@ class Tic_tac_AI
     elsif win_chance.include?([board[2], board[4], board[6]].join)
       choice = [2,6]
     else 
-      choice = [] << board.index('_')
+      choice = [board.index('_')]
     end
 
     if @board.open?(choice[0])
-      @board.board[choice[0]] = @letter
+      choice[0]
     else
-      @board.board[choice[1]] = @letter
+      choice[1]
     end
   end
 
   def can_win?
-    space_between = find_space_between(@letter)
-    space_between ? @board.board[space_between] = @letter : false
+    find_space_between(@letter)
   end
 
   def can_block?
-    space_between = find_space_between(@opponent_letter)
-    space_between ? @board.board[space_between] = @letter : false 
+    find_space_between(@opponent_letter)
   end
 
   def find_space_between(letter)

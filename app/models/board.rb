@@ -11,37 +11,49 @@ class Board
   end
 
   def show_board
-    board = @board
-    
     %Q{ 
       Welcome to Tic-Tac-Toe. Input 1-9 to make a move.
       ..........
-      #{board[0] + board[1] + board[2]}
-      #{board[3] + board[4] + board[5]}
-      #{board[6] + board[7] + board[8]}
+      #{@board[0] + @board[1] + @board[2]}
+      #{@board[3] + @board[4] + @board[5]}
+      #{@board[6] + @board[7] + @board[8]}
       ..........
     }
   end
 
-  def not_full?
-    return @board.include?("_") 
+  def full?
+    return !@board.include?("_")
   end
 
   def open?(space_number)
+    return false unless (0..8).include?(space_number)
     return @board[space_number] == "_"
+  end
+
+  def update_board(player_choice, player_letter)
+    @board[player_choice] = player_letter
   end
 
   def check_game(player)
     combos = @combos.map {|combo| @board[combo[0]] + @board[combo[1]] + @board[combo[2]]}
-    return combos.include?(player*3) || !not_full?
+    return combos.include?(player*3) || full?
   end
 
   def game_session(player_one, player_two)
-    while not_full?
+    until full?
+      choice = false
       [player_one, player_two].each do |player|
+        
         system 'clear'
         puts show_board
-        player.take_turn
+
+        loop do 
+          puts player.letter + ":"
+          choice = player.take_turn 
+          break if open?(choice)
+        end
+
+        update_board(choice, player.letter)
 
         if check_game(player.letter)
           system 'clear'
