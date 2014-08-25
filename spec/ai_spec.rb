@@ -3,117 +3,84 @@ require "./app/models/board.rb"
 
 describe Tic_tac_AI do
 
-	let!(:board) { Board.new }
+  let!(:board) { Board.new }
+  let!(:ai) { Tic_tac_AI.new(board, "X", "O")}
 
-	describe "first move" do
-		it 'chooses center if possible' do
-			board.board = ["X","_","_","_","_","_","_","_","_"]
-			com_player = Tic_tac_AI.new(board, "O", "X")
-			com_player.take_turn
-			expect(board.board).to eq ["X","_","_","_","O","_","_","_","_"]
-		end
+  describe "#take_turn" do
+    it 'responds to #take_turn' do
+      expect(ai).to respond_to(:take_turn)
+    end
 
-		it 'chooses corner if center not possible' do
-			board.board = ["_","_","_","_","X","_","_","_","_"]
-			com_player = Tic_tac_AI.new(board, "O", "X")
-			com_player.take_turn
-			expect(board.board).to eq ["_","_","_","_","X","_","_","_","O"]
-		end
-	end
+    it "wins if it can" do
+      board.combos.each do |combo|
+        sets = [["X", "_", "X"], ["X", "_", "X"], ["X", "_", "X"]]
+        sets.each do |set|
+          board.board[combo[0]] = set[0]
+          board.board[combo[1]] = set[1]
+          board.board[combo[2]] = set[2]
+          ai.take_turn
+          expect(ai.take_turn).to eq ai.find_space_between("X")
+        end
+      end
+    end
 
-	describe "#try_win" do
-		it 'will win horizontally if possible' do
-			board.board = ["O","O","_","_","_","_","_","_","_"]
-			com_player = Tic_tac_AI.new(board, "O", "X")
-			com_player.take_turn
-			expect(board.check_game("O")).to eq true
+    it "blocks if it can" do
+      board.combos.each do |combo|
+        sets = [["O", "_", "O"], ["O", "_", "O"], ["O", "_", "O"]]
+        sets.each do |set|
+          board.board[combo[0]] = set[0]
+          board.board[combo[1]] = set[1]
+          board.board[combo[2]] = set[2]
+          ai.take_turn
+          expect(ai.take_turn).to eq ai.find_space_between("O")
+        end
+      end
+    end
 
-			board.board = ["_","_","_","O","_","O","_","_","_"]
-			com_player = Tic_tac_AI.new(board, "O", "X")
-			com_player.take_turn
-			expect(board.check_game("O")).to eq true
+    it "makes a move otherwise" do
+      ["O","X","_","_","_","_","_","_","_"].permutation(9).each do |potential_board|
+        board.board = potential_board
+        expect(ai.take_turn).to be_a Integer 
+      end
 
-			board.board = ["_","_","_","_","_","_","_","O","O"]
-			com_player = Tic_tac_AI.new(board, "O", "X")
-			com_player.take_turn
-			expect(board.check_game("O")).to eq true
-		end
+      ["O","X","O","_","_","_","_","_","_"].permutation(9).each do |potential_board|
+        board.board = potential_board
+        expect(ai.take_turn).to be_a Integer 
+      end
 
-		it 'will win vertically if possible' do
-			board.board = ["O","_","_","O","_","_","_","_","_"]
-			com_player = Tic_tac_AI.new(board, "O", "X")
-			com_player.take_turn
-			expect(board.check_game("O")).to eq true
-			
-			board.board = ["_","_","_","_","O","_","_","O","_"]
-			com_player = Tic_tac_AI.new(board, "O", "X")
-			com_player.take_turn
-			expect(board.check_game("O")).to eq true
-			
-			board.board = ["_","_","_","_","_","O","_","_","O"]
-			com_player = Tic_tac_AI.new(board, "O", "X")
-			com_player.take_turn
-			expect(board.check_game("O")).to eq true
-		end
+      ["O","X","O","X","_","_","_","_","_"].permutation(9).each do |potential_board|
+        board.board = potential_board
+        expect(ai.take_turn).to be_a Integer 
+      end
+    end
+  end
 
-		it 'will win diagonally if possible' do
-			board.board = ["O","_","_","_","O","_","_","_","_"]
-			com_player = Tic_tac_AI.new(board, "O", "X")
-			com_player.take_turn
-			expect(board.check_game("O")).to eq true
+  describe "#make_move" do
+    describe "first move" do
+      it 'chooses center if possible' do
+        board.board = ["X","_","_","_","_","_","_","_","_"]
+        expect(ai.make_move).to be 4
+      end
 
-			board.board = ["_","_","O","_","O","_","_","_","_"]
-			com_player = Tic_tac_AI.new(board, "O", "X")
-			com_player.take_turn
-			expect(board.check_game("O")).to eq true
-		end
-	end
+      it 'chooses corner if center not possible' do
+        board.board = ["_","_","_","_","X","_","_","_","_"]
+        expect([0,2,6,8]).to include(ai.make_move)
+      end
+    end
+  end
 
-	describe "#try_block" do
-		it 'will block horizontally if possible' do
-			board.board = ["X","X","_","_","_","_","_","_","_"]
-			com_player = Tic_tac_AI.new(board, "O", "X")
-			com_player.take_turn
-			expect(board.board).to eq ["X","X","O","_","_","_","_","_","_"]
-
-			board.board = ["_","_","_","X","_","X","_","_","_"]
-			com_player = Tic_tac_AI.new(board, "O", "X")
-			com_player.take_turn
-			expect(board.board).to eq ["_","_","_","X","O","X","_","_","_"]
-
-			board.board = ["_","_","_","_","_","_","_","X","X"]
-			com_player = Tic_tac_AI.new(board, "O", "X")
-			com_player.take_turn
-			expect(board.board).to eq ["_","_","_","_","_","_","O","X","X"]
-		end
-
-		it 'will block vertically if possible' do
-			board.board = ["X","_","_","X","_","_","_","_","_"]
-			com_player = Tic_tac_AI.new(board, "O", "X")
-			com_player.take_turn
-			expect(board.board).to eq ["X","_","_","X","_","_","O","_","_"]
-			
-			board.board = ["_","_","_","_","X","_","_","X","_"]
-			com_player = Tic_tac_AI.new(board, "O", "X")
-			com_player.take_turn
-			expect(board.board).to eq ["_","O","_","_","X","_","_","X","_"]
-			
-			board.board = ["_","_","_","_","_","X","_","_","X"]
-			com_player = Tic_tac_AI.new(board, "O", "X")
-			com_player.take_turn
-			expect(board.board).to eq ["_","_","O","_","_","X","_","_","X"]
-		end
-
-		it 'will block diagonally if possible' do
-			board.board = ["X","_","_","_","X","_","_","_","_"]
-			com_player = Tic_tac_AI.new(board, "O", "X")
-			com_player.take_turn
-			expect(board.board).to eq ["X","_","_","_","X","_","_","_","O"]
-
-			board.board = ["_","_","X","_","X","_","_","_","_"]
-			com_player = Tic_tac_AI.new(board, "O", "X")
-			com_player.take_turn
-			expect(board.board).to eq ["_","_","X","_","X","_","O","_","_"]
-		end
-	end
+  describe "#find_space_between" do
+    it 'determines the place on the board between two letters' do
+      board.combos.each do |combo|
+        board.board = ["_","_","_","_","_","_","_","_","_"]
+        sets = [["X", "_", "X"], ["X", "_", "X"], ["X", "_", "X"]]
+        sets.each do |set|
+          board.board[combo[0]] = set[0]
+          board.board[combo[1]] = set[1]
+          board.board[combo[2]] = set[2]
+          expect(ai.find_space_between("X")).to eq combo[set.index("_")]
+        end
+      end
+    end
+  end
 end
