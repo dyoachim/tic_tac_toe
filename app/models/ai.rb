@@ -23,10 +23,10 @@ class Tic_tac_AI
     board = @board.board
 
     if board.include?(@opponent_letter) && !(board.include?(@letter))
-      if @board.open?(4)
+      if @board.open_space?(4)
         choice = [4]
       else
-        pick = [0,2,6,8].sample until pick && @board.open?(pick)
+        pick = [0,2,6,8].sample until pick && @board.open_space?(pick)
         choice = [pick]
       end
     elsif win_chance.include?([board[3], board[4], board[5]].join)
@@ -47,7 +47,7 @@ class Tic_tac_AI
       choice = [board.index('_')]
     end
 
-    if @board.open?(choice[0])
+    if @board.open_space?(choice[0])
       choice[0]
     else
       choice[1]
@@ -70,7 +70,7 @@ class Tic_tac_AI
       line = [board[combo[0]], board[combo[1]], board[combo[2]]].join
       if block_chance.include?(line)
         (0..2).each do |place|
-          return combo[place] if @board.open?(combo[place])
+          return combo[place] if @board.open_space?(combo[place])
         end
       end
     end

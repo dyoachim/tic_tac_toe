@@ -21,11 +21,16 @@ class Board
     }
   end
 
+  def puts_board
+    system "clear"
+    puts show_board
+  end
+
   def full?
     return !@board.include?("_")
   end
 
-  def open?(space_number)
+  def open_space?(space_number)
     return false unless (0..8).include?(space_number)
     return @board[space_number] == "_"
   end
@@ -41,23 +46,20 @@ class Board
 
   def game_session(player_one, player_two)
     until full?
-      choice = false
       [player_one, player_two].each do |player|
+        choice = false
         
-        system 'clear'
-        puts show_board
-
         loop do 
+          puts_board
           puts player.letter + ":"
           choice = player.take_turn 
-          break if open?(choice)
+          break if open_space?(choice)
         end
 
         update_board(choice, player.letter)
 
         if check_game(player.letter)
-          system 'clear'
-          puts show_board
+          puts_board
           return
         end
       end
