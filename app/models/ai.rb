@@ -10,16 +10,10 @@ class AIPlayer
   def take_turn
     win = find_space_between(@letter)
     block = find_space_between(@opponent_letter)
+    choice = []
 
     return win if  win
     return block if block
-
-    make_move
-  end
-
-  def make_move
-    board = @board.board
-    choice = []
 
     @board.combos.each do |win_numbers|
       win_numbers.each do |number|
@@ -34,8 +28,7 @@ class AIPlayer
     return pick.first
   end
 
-
-  private
+  
   def find_space_between(letter)
     block_chance = [letter, letter,'_'].permutation(3).map(&:join).uniq
     board = @board.board

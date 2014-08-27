@@ -59,12 +59,12 @@ describe AIPlayer do
     describe "first move" do
       it 'chooses center if possible' do
         board.board = ["X","_","_","_","_","_","_","_","_"]
-        expect(ai.make_move).to be 4
+        expect(ai.take_turn).to be 4
       end
 
       it 'chooses corner if center not possible' do
         board.board = ["_","_","_","_","X","_","_","_","_"]
-        expect([0,2,6,8]).to include(ai.make_move)
+        expect([0,2,6,8]).to include(ai.take_turn)
       end
     end
   end
