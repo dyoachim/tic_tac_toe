@@ -28,19 +28,21 @@ class AIPlayer
     return pick.first
   end
 
-  
-  def find_space_between(letter)
-    block_chance = [letter, letter,'_'].permutation(3).map(&:join).uniq
-    board = @board.board
 
+  private
+  def find_space_between(letter)
     @board.combos.each do |combo|
-      line = [board[combo[0]], board[combo[1]], board[combo[2]]].join
-      if block_chance.include?(line)
-        (0..2).each do |place|
-          return combo[place] if @board.open_space?(combo[place])
-        end
+      line = ""
+      combo.each { |place| line += @board.board[place] }
+
+      blank = /_/ =~ line
+
+      if blank
+        line[blank] = letter
+        return combo[blank] if line == letter * line.length
       end
     end
+
     false
   end
 end
