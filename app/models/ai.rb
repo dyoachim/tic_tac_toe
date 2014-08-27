@@ -18,15 +18,12 @@ class AIPlayer
   end
 
   def make_move
-    win_chance = [@letter, @letter,'_','_','_'].permutation(3).map(&:join).uniq
     board = @board.board
     choice = []
 
     @board.combos.each do |win_numbers|
-      if win_chance.include?([ board[win_numbers[0]], board[win_numbers[1]], board[win_numbers[2]]].join)
-        win_numbers.each do |number|
-          choice << number if @board.open_space?(number)
-        end
+      win_numbers.each do |number|
+        choice << number if @board.open_space?(number)
       end
     end
 
