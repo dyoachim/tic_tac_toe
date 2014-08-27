@@ -1,10 +1,10 @@
 require "./app/models/ai.rb"
 require "./app/models/board.rb"
 
-describe Tic_tac_AI do
+describe AIPlayer do
 
   let!(:board) { Board.new }
-  let!(:ai) { Tic_tac_AI.new(board, "X", "O")}
+  let!(:ai) { AIPlayer.new(board, "X", "O")}
 
   describe "#take_turn" do
     it 'responds to #take_turn' do
