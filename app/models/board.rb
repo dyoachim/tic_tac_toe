@@ -43,26 +43,4 @@ class Board
     combos = @combos.map {|combo| @board[combo[0]] + @board[combo[1]] + @board[combo[2]]}
     return combos.include?(player*3) || full?
   end
-
-  def game_session(player_one, player_two)
-    until full?
-      [player_one, player_two].each do |player|
-        choice = false
-        
-        loop do 
-          puts_board
-          puts player.letter + ":"
-          choice = player.take_turn 
-          break if open_space?(choice)
-        end
-
-        update_board(choice, player.letter)
-
-        if check_game(player.letter)
-          puts_board
-          return
-        end
-      end
-    end
-  end
 end

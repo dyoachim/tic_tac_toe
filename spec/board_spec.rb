@@ -90,8 +90,4 @@ describe Board do
       end
     end
   end
-
-  describe "#game_sesssion" do
-    pending
-  end
 end
