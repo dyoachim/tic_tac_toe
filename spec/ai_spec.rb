@@ -51,21 +51,9 @@ describe AIPlayer do
       expect([0,2,6,8]).to include(ai.take_turn)
     end
 
-    it "makes a move otherwise" do
-      ["O","X","_","_","_","_","_","_","_"].permutation(9).each do |potential_board|
-        board.board = potential_board
-        expect(ai.take_turn).to be_a Integer 
-      end
-
-      ["O","X","O","_","_","_","_","_","_"].permutation(9).each do |potential_board|
-        board.board = potential_board
-        expect(ai.take_turn).to be_a Integer 
-      end
-
-      ["O","X","O","X","_","_","_","_","_"].permutation(9).each do |potential_board|
-        board.board = potential_board
-        expect(ai.take_turn).to be_a Integer 
-      end
+    it 'chooses an edge otherwise' do
+      board.board = ["X","_","Y","_","Z","_","A","_","B"]
+      expect([1,3,5,7]).to include(ai.take_turn)
     end
   end
 end
